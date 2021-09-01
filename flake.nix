@@ -15,7 +15,7 @@
           devShell = pkgs.mkShell {
             shellHook = self.checks.${system}.pre-commit-check.shellHook;
           };
-          packages.pychromeless = import ./package.nix { inherit pkgs; };
+          packages.pychromeless = import ./default.nix { inherit pkgs; };
           defaultPackage = packages.pychromeless;
         };
     in

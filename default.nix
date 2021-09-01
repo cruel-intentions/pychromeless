@@ -1,8 +1,8 @@
 { pkgs, fetchzip ? pkgs.fetchzip }:
 let
   chromeium = fetchzip {
-    url = "https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-57/stable-headless-chromium-amazonlinux-2.zip";
-    sha256 = "sha256-hi0uaGQz1zYzzEzTUr+/tjWFQ6ukBhJEcRXSj8HG+Bg=";
+    url = "https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-29/stable-headless-chromium-amazonlinux-2017-03.zip";
+    sha256 = "sha256-/IeSunRci08s6AgWzZT8DjlQnTA+vujhBEbxgTUQ/f8=";
   };
   chromedriver = fetchzip {
     url ="https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip";
