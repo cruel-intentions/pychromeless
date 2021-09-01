@@ -20,15 +20,15 @@ mkdrv {
   installPhase = ''
     PYTHONPYCACHEPREFIX=./ pip install \
         -r requirements.txt \
-        -t $out/libs/python
-    LAYER_DIR=$out/libs/python/pychromeless
+        -t $out/python
+    LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
     cp -r ./src/* $LAYER_DIR/
     cp -r ./lib $LAYER_DIR/
     cp -r ${chromeium}/* $LAYER_DIR/bin/
     cp -r ${chromedriver}/* $LAYER_DIR/bin/
-    find $out/libs/python -type f -name '*.c' -delete
-    find $out/libs/python -type f -name '*.pyc' -delete
-    find $out/libs/python -type f -name '*.so' -exec strip -s {} +
+    find $out -type f -name '*.c' -delete
+    find $out -type f -name '*.pyc' -delete
+    find $out -type f -name '*.so' -exec strip -s {} +
   '';
 }
