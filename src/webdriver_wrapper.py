@@ -51,7 +51,7 @@ class WebDriverWrapper:
             'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
 
         currentdir = os.path.dirname(os.path.abspath(__file__))
-        print("{currentdir}/bin/headless-chromium")
+        print(f"{currentdir}/bin/headless-chromium")
         chrome_options.binary_location = f"{currentdir}/bin/headless-chromium"
 
         self._driver = webdriver.Chrome(chrome_options=chrome_options)
