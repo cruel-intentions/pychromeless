@@ -24,6 +24,7 @@ mkdrv {
     LAYER_DIR=$out/libs/python/pychromeless
     mkdir -p $LAYER_DIR/bin
     cp -r ./src/* $LAYER_DIR/
+    cp -r ./lib $LAYER_DIR/
     cp -r ${chromeium}/* $LAYER_DIR/bin/
     cp -r ${chromedriver}/* $LAYER_DIR/bin/
     find $out/libs/python -type f -name '*.c' -delete
