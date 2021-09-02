@@ -14,6 +14,7 @@ mkdrv {
   name = "pychromeless";
   buildInputs = [
     pkgs.nss
+    pkgs.expat
     pkgs.cacert
     (pkgs.python39.withPackages (ps: [ ps.pip ps.setuptools ]))
   ];
@@ -28,6 +29,7 @@ mkdrv {
     cp --no-preserve=mode -r ./src/* $LAYER_DIR/
     cp --no-preserve=mode -r ./lib/* $out/lib/
     cp --no-preserve=mode ${pkgs.nss}/lib/libnss3.so $out/lib/libnss3.so
+    cp --no-preserve=mode -rL ${pkgs.expat}/lib/libexpat.so $out/lib/
     cp --no-preserve=mode -r ${chromeium}/* $LAYER_DIR/bin/
     cp --no-preserve=mode -r ${chromedriver}/* $LAYER_DIR/bin/
     find $out -type f -name '*.c' -delete
