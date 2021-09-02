@@ -28,7 +28,7 @@ mkdrv {
     mkdir -p $out/lib
     cp --no-preserve=mode -r ./src/* $LAYER_DIR/
     cp --no-preserve=mode -r ./lib/* $out/lib/
-    cp --no-preserve=mode ${pkgs.nss}/lib/libnss3.so $out/lib/libnss3.so
+    cp --no-preserve=mode -rL ${pkgs.nss}/lib/*.so $out/lib/libnss3.so
     cp --no-preserve=mode -rL ${pkgs.expat}/lib/libexpat.so.1 $out/lib/
     cp --no-preserve=mode -r ${chromeium}/* $LAYER_DIR/bin/
     cp --no-preserve=mode -r ${chromedriver}/* $LAYER_DIR/bin/
