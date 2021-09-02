@@ -64,7 +64,7 @@ class WebDriverWrapper:
                 --log-level=1 \
                 --v=99 \
                 --single-process \
-               --data-path={self._tmp_folder}/data-path \
+                --data-path={self._tmp_folder}/data-path \
                 --ignore-certificate-errors \
                 --homedir={self._tmp_folder} \
                 --disk-cache-dir={self._tmp_folder}/cache-dir
