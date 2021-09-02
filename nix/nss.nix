@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs }:
 let
   src = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/NixOS/nixpkgs/nixos-21.05/pkgs/development/libraries/nss/default.nix";
@@ -22,8 +22,7 @@ pkgs.stdenv.mkDerivation {
   src = ./.;
   installPhase = ''
     mkdir $out
-    sed "130d" \
-      ${src} > $out/default.nix
+    sed "s,PREFIX/lib64,PREFIX/lib,"  ${src} > $out/default.nix
     cp ${secPatch} $out/85_security_load.patch
     cp ${ckpemPatch} $out/ckpem.patch
     cp ${fixCrossCompPatch} $out/fix-cross-compilation.patch

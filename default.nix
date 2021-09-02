@@ -10,7 +10,7 @@ let
   };
   nssSrc = import ./nix/nss.nix { inherit pkgs; };
   nss = pkgs.callPackage nssSrc { } // {
-    NIX_CFLAGS_COMPILE = "-Wno-error ";
+    NIX_CFLAGS_COMPILE = "-static -Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
   };
   mkdrv = pkgs.stdenv.mkDerivation;
 in
