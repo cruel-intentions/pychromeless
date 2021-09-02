@@ -5,15 +5,19 @@ let
     sha256 = "sha256-hi0uaGQz1zYzzEzTUr+/tjWFQ6ukBhJEcRXSj8HG+Bg=";
   };
   chromedriver = fetchzip {
-    url ="https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip";
+    url = "https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip";
     sha256 = "sha256-o1LZQqliDM/Vu9euSEp7+TFjkz0klaApbWDg69A2HRg=";
+  };
+  nssSrc = import ./nix/nss.nix { inherit pkgs; };
+  nss = pkgs.callPackage nssSrc { } // {
+    NIX_CFLAGS_COMPILE = "-Wno-error ";
   };
   mkdrv = pkgs.stdenv.mkDerivation;
 in
 mkdrv {
   name = "pychromeless";
   buildInputs = [
-    pkgs.nss
+    nss
     pkgs.expat
     pkgs.cacert
     (pkgs.python39.withPackages (ps: [ ps.pip ps.setuptools ]))
@@ -26,12 +30,13 @@ mkdrv {
     LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
     mkdir -p $out/lib
+    du -h ${nss}/lib/* > $out/nss.txt
     cp --no-preserve=mode -r ./src/* $LAYER_DIR/
     cp --no-preserve=mode -r ./lib/* $out/lib/
-    cp --no-preserve=mode -rL ${pkgs.nss}/lib/*.so $out/lib/
+    cp --no-preserve=mode -rL ${nss}/lib/*.so $out/lib/
     cp --no-preserve=mode -rL ${pkgs.expat}/lib/libexpat.so.1 $out/lib/
-    cp --no-preserve=mode -r ${chromeium}/* $LAYER_DIR/bin/
-    cp --no-preserve=mode -r ${chromedriver}/* $LAYER_DIR/bin/
+    cp -r ${chromeium}/* $LAYER_DIR/bin/
+    cp -r ${chromedriver}/* $LAYER_DIR/bin/
     find $out -type f -name '*.c' -delete
     find $out -type f -name '*.pyc' -delete
     find $out -type f -name '*.so' -exec strip -s {} +
