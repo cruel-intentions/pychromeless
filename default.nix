@@ -13,6 +13,7 @@ in
 mkdrv {
   name = "pychromeless";
   buildInputs = [
+    pkgs.nss
     pkgs.cacert
     (pkgs.python39.withPackages (ps: [ ps.pip ps.setuptools ]))
   ];
@@ -23,10 +24,12 @@ mkdrv {
         -t $out/python
     LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
-    cp -r ./src/* $LAYER_DIR/
-    cp -r ./lib $LAYER_DIR/
-    cp -r ${chromeium}/* $LAYER_DIR/bin/
-    cp -r ${chromedriver}/* $LAYER_DIR/bin/
+    mkdir -p $LAYER_DIR/lib
+    cp --no-preserve=mode -r ./src/* $LAYER_DIR/
+    cp --no-preserve=mode -r ./lib/* $LAYER_DIR/lib/
+    cp --no-preserve=mode ${pkgs.nss}/lib/libnss3.so $LAYER_DIR/lib/libnss3.so
+    cp --no-preserve=mode -r ${chromeium}/* $LAYER_DIR/bin/
+    cp --no-preserve=mode -r ${chromedriver}/* $LAYER_DIR/bin/
     find $out -type f -name '*.c' -delete
     find $out -type f -name '*.pyc' -delete
     find $out -type f -name '*.so' -exec strip -s {} +
