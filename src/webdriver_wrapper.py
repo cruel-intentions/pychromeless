@@ -6,7 +6,7 @@ from selenium import webdriver
 
 
 class WebDriverWrapper:
-    def __init__(self, download_location=None):
+    def __init__(self, download_location=None, debug=False):
         chrome_options = webdriver.ChromeOptions()
         self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
         self.download_location = download_location
@@ -51,6 +51,27 @@ class WebDriverWrapper:
             'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
 
         currentdir = os.path.dirname(os.path.abspath(__file__))
+        if debug:
+           print('fake run')
+            out = subprocess.run(f'''{currentdir}/bin/headless-chromium \
+                --headless \
+                --no-sandbox \
+                --disable-gpu \
+                --window-size=1280x1696 \
+                --user-data-dir={self._tmp_folder}/user-data \
+                --hide-scrollbars \
+                --enable-logging \
+                --log-level=1 \
+                --v=99 \
+                --single-process \
+               --data-path={self._tmp_folder}/data-path \
+                --ignore-certificate-errors \
+                --homedir={self._tmp_folder} \
+                --disk-cache-dir={self._tmp_folder}/cache-dir
+            ''', shell=True, capture_output=True)
+            print('fake run out', out.stdout)
+            print('fake run err', out.stderr)
+
         chrome_options.binary_location = f"{currentdir}/bin/headless-chromium"
             
         self._driver = webdriver.Chrome(
