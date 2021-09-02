@@ -52,7 +52,9 @@ class WebDriverWrapper:
 
         currentdir = os.path.dirname(os.path.abspath(__file__))
         if debug:
-            print('fake run')
+            import subprocess
+            print('PATH', os.getenv("PATH"))
+            print('LD_LIBRARY_PATH', os.getenv("LD_LIBRARY_PATH"))
             out = subprocess.run(f'''{currentdir}/bin/headless-chromium \
                 --headless \
                 --no-sandbox \

@@ -24,10 +24,10 @@ mkdrv {
         -t $out/python
     LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
-    mkdir -p $LAYER_DIR/lib
+    mkdir -p $out/lib
     cp --no-preserve=mode -r ./src/* $LAYER_DIR/
-    cp --no-preserve=mode -r ./lib/* $LAYER_DIR/lib/
-    cp --no-preserve=mode ${pkgs.nss}/lib/libnss3.so $LAYER_DIR/lib/libnss3.so
+    cp --no-preserve=mode -r ./lib/* $out/lib/
+    cp --no-preserve=mode ${pkgs.nss}/lib/libnss3.so $out/lib/libnss3.so
     cp --no-preserve=mode -r ${chromeium}/* $LAYER_DIR/bin/
     cp --no-preserve=mode -r ${chromedriver}/* $LAYER_DIR/bin/
     find $out -type f -name '*.c' -delete
