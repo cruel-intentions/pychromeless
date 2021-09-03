@@ -12,6 +12,7 @@ pkgs.nss.overrideAttrs (oldAttrs: oldAttrs // {
     ''
       runHook preBuild
       sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
+      sed -i 's|/lib64|/lib|' cmd/platlibs.mk
       ./build.sh -v --opt \
         --with-nspr=${pkgs.nspr.dev}/include:${pkgs.nspr.out}/lib \
         --system-sqlite \
