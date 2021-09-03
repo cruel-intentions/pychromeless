@@ -8,10 +8,7 @@ let
     url = "https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip";
     sha256 = "sha256-o1LZQqliDM/Vu9euSEp7+TFjkz0klaApbWDg69A2HRg=";
   };
-  nssSrc = import ./nix/nss.nix { inherit pkgs; };
-  nss = pkgs.callPackage nssSrc { } // {
-    NIX_CFLAGS_COMPILE = "-static -Wno-error -DNIX_NSS_LIBDIR=\"${placeholder "out"}/lib/\"";
-  };
+  nss = import ./nix/nss.nix { inherit pkgs; };
   mkdrv = pkgs.stdenv.mkDerivation;
 in
 mkdrv {
