@@ -1,4 +1,4 @@
-name: "Test"
+name: "Build Cache"
 on:
   pull_request:
   push:
@@ -14,4 +14,4 @@ jobs:
       with:
         name: cruel-intentions
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix-build --option build-use-sandbox false
+    - run: nix-build
