@@ -25,6 +25,7 @@ in
 mkdrv {
   name = "pychromeless";
   buildInputs = with pkgs;[
+    public-sans
     rpm
     cpio
     expat
@@ -37,9 +38,11 @@ mkdrv {
     rm -rf $xout/python/selenium/webdriver/firefox
     sed -i '18d' $out/python/selenium/webdriver/__init__.py
     sed -i '18d' $out/python/selenium/webdriver/__init__.py
-
     LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
+    mkdir -p $LAYER_DIR/fonts
+    cp -r ${pkgs.public-sans}/* $LAYER_DIR/fonts/
+    cp -r $src/fonts/fonts.conf $LAYER_DIR/fonts.conf
     mkdir -p $out/lib
     mkdir -p rpm/nss3
     cd rpm/nss3

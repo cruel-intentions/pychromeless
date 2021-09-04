@@ -39,25 +39,28 @@ class WebDriverWrapper:
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1280x1696")
-        chrome_options.add_argument(
-            "--user-data-dir={}".format(self._tmp_folder + "/user-data")
-        )
+        chrome_options.add_argument(f"--user-data-dir={self._tmp_folder}/user-data")
         chrome_options.add_argument("--hide-scrollbars")
         chrome_options.add_argument("--enable-logging")
         chrome_options.add_argument("--log-level=0")
         chrome_options.add_argument("--v=99")
         chrome_options.add_argument("--single-process")
-        chrome_options.add_argument(
-            "--data-path={}".format(self._tmp_folder + "/data-path")
-        )
+        chrome_options.add_argument(f"--data-path={self._tmp_folder}/data-path")
         chrome_options.add_argument("--ignore-certificate-errors")
         chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--homedir={}".format(self._tmp_folder))
+        chrome_options.add_argument(f"--homedir={self._tmp_folder}")
+        chrome_options.add_argument(f"--disk-cache-dir={self._tmp_folder}/cache-dir")
         chrome_options.add_argument(
-            "--disk-cache-dir={}".format(self._tmp_folder + "/cache-dir")
-        )
-        chrome_options.add_argument(
-            "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+            " ".join(
+                [
+                    "user-agent=Mozilla/4.0",
+                    "(X11; Linux x86_64)"
+                    "appleWebKit/537.36"
+                    "(KHTML, like Gecko)"
+                    "Chrome/61.0.3163.100"
+                    "Safari/537.36",
+                ]
+            )
         )
 
         currentdir = os.path.dirname(os.path.abspath(__file__))
@@ -67,30 +70,28 @@ class WebDriverWrapper:
             print("PATH", os.getenv("PATH"))
             print("LD_LIBRARY_PATH", os.getenv("LD_LIBRARY_PATH"))
             out = subprocess.run(
-                f"""{currentdir}/bin/headless-chromium \
+                f"""FONTCONFIG_PATH={currentdir} {currentdir}/bin/headless-chromium \
                 --headless \
                 --no-sandbox \
                 --disable-gpu \
-                --window-size=1280x1696 \
-                --user-data-dir={self._tmp_folder}/user-data \
-                --hide-scrollbars \
-                --enable-logging \
-                --log-level=1 \
-                --v=99 \
                 --single-process \
-                --data-path={self._tmp_folder}/data-path \
-                --ignore-certificate-errors \
+                --hide-scrollbars \
                 --disable-dev-shm-usage \
+                --window-size=1280x1696 \
+                --ignore-certificate-errors \
                 --homedir={self._tmp_folder} \
-                --disk-cache-dir={self._tmp_folder}/cache-dir
-            """,
+                --data-path={self._tmp_folder}/data-path \
+                --user-data-dir={self._tmp_folder}/user-data \
+                --disk-cache-dir={self._tmp_folder}/cache-dir """,
                 shell=True,
                 capture_output=True,
             )
             print("fake run out", out.stdout)
             print("fake run err", out.stderr)
 
-        chrome_options.binary_location = f"{currentdir}/bin/headless-chromium"
+        chrome_options.binary_location = (
+            f"FONTCONFIG_PATH={currentdir} {currentdir}/bin/headless-chromium"
+        )
 
         self._driver = webdriver.Chrome(
             executable_path=f"{currentdir}/bin/chromedriver",
