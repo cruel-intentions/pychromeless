@@ -1,4 +1,4 @@
-{ pkgs, fetchzip ? pkgs.fetchzip }:
+{ pkgs ? import <nixpkgs> { }, fetchzip ? pkgs.fetchzip }:
 let
   # too heavy
   # headless-chromium-rpm = builtins.fetchurl "https://mirror1.cl.netactuate.com/fedora-epel/7/x86_64/Packages/c/chromium-headless-90.0.4430.212-1.el7.x86_64.rpm";
