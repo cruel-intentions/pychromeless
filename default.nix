@@ -1,9 +1,12 @@
-{ pkgs ? import <nixpkgs> { }, fetchzip ? pkgs.fetchzip }:
+{ pkgs ? import <nixpkgs> { }, fetchzip ? pkgs.fetchzip, fetchPypi ? pkgs.python39.pkgs.fetchPypi }:
 let
   # too heavy
   # headless-chromium-rpm = builtins.fetchurl "https://mirror1.cl.netactuate.com/fedora-epel/7/x86_64/Packages/c/chromium-headless-90.0.4430.212-1.el7.x86_64.rpm";
   # chromedriver-rpm = builtins.fetchurl "https://mirror1.cl.netactuate.com/fedora-epel/7/x86_64/Packages/c/chromedriver-90.0.4430.212-1.el7.x86_64.rpm";
-  nss-rpm = builtins.fetchurl "https://cdn.amazonlinux.com/blobstore/27a22ecd84fb4046a329580e8cbb0128d66cb2fd0a22ad620d07fd09e2df4ff2/nss-3.53.1-7.amzn2.x86_64.rpm";
+  nss-rpm = builtins.fetchurl {
+    url = "https://cdn.amazonlinux.com/blobstore/27a22ecd84fb4046a329580e8cbb0128d66cb2fd0a22ad620d07fd09e2df4ff2/nss-3.53.1-7.amzn2.x86_64.rpm";
+    sha256 = "1wjgvzi0kz871mias8haznr6rmi806xqq3jq56ilch7vhk6jx8i7";
+  };
   chromeium = fetchzip {
     url = "https://github.com/adieuadieu/serverless-chrome/releases/download/v1.0.0-57/stable-headless-chromium-amazonlinux-2.zip";
     sha256 = "sha256-hi0uaGQz1zYzzEzTUr+/tjWFQ6ukBhJEcRXSj8HG+Bg=";
@@ -11,6 +14,11 @@ let
   chromedriver = fetchzip {
     url = "https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip";
     sha256 = "sha256-o1LZQqliDM/Vu9euSEp7+TFjkz0klaApbWDg69A2HRg=";
+  };
+  selenium = fetchPypi {
+    pname = "selenium";
+    version = "2.53.0";
+    sha256 = "sha256-V5VpujSSzRAucIbMvbFRr4e0iyWtJwI0ap0qzoYV9OE=";
   };
   mkdrv = pkgs.stdenv.mkDerivation;
 in
@@ -25,12 +33,11 @@ mkdrv {
   ];
   src = ./.;
   installPhase = ''
-    PYTHONPYCACHEPREFIX=./ pip install \
-        -r requirements.txt \
-        -t $out/python
-    rm -rf $out/python/selenium/webdriver/firefox
+    PYTHONPYCACHEPREFIX=./ pip install ${selenium} -t $out/python
+    rm -rf $xout/python/selenium/webdriver/firefox
     sed -i '18d' $out/python/selenium/webdriver/__init__.py
     sed -i '18d' $out/python/selenium/webdriver/__init__.py
+
     LAYER_DIR=$out/python/pychromeless
     mkdir -p $LAYER_DIR/bin
     mkdir -p $out/lib
