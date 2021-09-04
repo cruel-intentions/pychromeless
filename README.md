@@ -13,20 +13,6 @@ All the process is explained [here](https://medium.com/21buttons-tech/crawling-t
 * [Chrome driver](https://sites.google.com/a/chromium.org/chromedriver/)
 * [Small chromium binary](https://github.com/adieuadieu/serverless-chrome/releases)
 
-## Requirements
-
-Install docker and dependencies:
-
-* `make fetch-dependencies`
-* [Installing Docker](https://docs.docker.com/engine/installation/#get-started)
-* [Installing Docker compose](https://docs.docker.com/compose/install/#install-compose)
-
-## Working locally
-
-To make local development easy, you can use the included docker-compose. 
-Have a look at the example in `lambda_function.py`: it looks up “21 buttons” on Google and prints the first result. 
-
-Run it with: `make docker-run`
 
 #### Downloading files
 
@@ -56,18 +42,49 @@ driver.enable_download_in_headless_chrome()
 driver._driver.find_element_by_class_name("btn").click()
 ```
 
-## Building and uploading the distributable package
+## Building
 
-Everything is summarized into a simple Makefile so use:
+```bash
+nix build
+```
 
-* `make build-lambda-package`
-* Upload the `build.zip` resulting file to your AWS Lambda function
-* Set Lambda environment variables (same values as in docker-compose.yml)
-    * `PYTHONPATH=/var/task/src:/var/task/lib`
-    * `PATH=/var/task/bin`
-* Adjust lambda function parameters to match your necessities, for the given example:
-    * Timeout: +10 seconds
-    * Memory: + 250MB 
+## Uploading the distributable package
+
+Just add ./result to your serverless package
+
+```yaml
+layers:
+  bla:  # serverlessjs expose this as BlaLambdaLayer ¯\_"/ _/¯
+    name: your-layer-name-at-aws-console
+    path: pathToThisFolder/ressult
+
+# we could use it in the same serverless.yaml
+# or deploy only this layer and use its arn in other yamls
+functions:
+  someFunction: 
+    # ... rest of your function info
+    layers:
+      - Ref: BlaLambdaLayer
+```
+
+Python example for your function
+
+```python
+from pychromeless.webdriver_wrapper import WebDriverWrapper
+from selenium.webdriver.common.keys import Keys
+
+def lambda_handler(*args, **kwargs):
+    driver = WebDriverWrapper()
+
+    driver.get_url('http://example.com')
+    example_text = driver.get_inner_html('(//div//h1)[1]')
+
+    driver.close()
+
+    return example_text
+
+```
+
 
 ## Shouts to
 * [Docker lambda](https://github.com/lambci/docker-lambda)
