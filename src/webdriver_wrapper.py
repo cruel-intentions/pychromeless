@@ -80,6 +80,7 @@ class WebDriverWrapper:
                 --single-process \
                 --data-path={self._tmp_folder}/data-path \
                 --ignore-certificate-errors \
+                --disable-dev-shm-usage \
                 --homedir={self._tmp_folder} \
                 --disk-cache-dir={self._tmp_folder}/cache-dir
             """,
